@@ -20,6 +20,7 @@ function isGray(imageData: ImageData, x: number, y: number): boolean {
 /** グレーのピクセル数を返す */
 function countGray(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d");
+  if (!ctx) return 0;
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   let count = 0;
   for (let y = 0; y < imageData.height; y++) {
@@ -31,7 +32,7 @@ function countGray(canvas: HTMLCanvasElement) {
 }
 
 export default function App() {
-  const canvasRef = useRef<HTMLCanvasElement>();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [output, setOutput] = useState("");
   const [grayCount, setGrayCount] = useState(0);
   const [remainedStrokes, setRemainedStrokes] = useState(0);
@@ -39,6 +40,8 @@ export default function App() {
   const [debugOut, setDebugOut] = useState("");
 
   function onInitMondai() {
+    if (!canvasRef.current) return;
+
     const canvasWidth = canvasRef.current.width;
     const canvasHeight = canvasRef.current.height;
 
@@ -46,6 +49,10 @@ export default function App() {
     const newOdai = Math.floor(Math.random() * ODAI_LIST.length);
 
     let ctx = canvasRef.current.getContext("2d");
+    if (!ctx) {
+      console.error('getContext("2d") returns null.')
+      return;
+    }
     // 塗りつぶす
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -65,6 +72,7 @@ export default function App() {
   }
 
   function onTouchStart(ev: React.TouchEvent<HTMLCanvasElement>) {
+    if (!canvasRef.current) return;
     if (remainedStrokes <= 0) return;
 
     const newPos = getClientTouchPos(ev.touches[0], canvasRef.current);
@@ -74,10 +82,15 @@ export default function App() {
 
   function onTouchMove(ev: React.TouchEvent<HTMLCanvasElement>) {
     if (remainedStrokes <= 0) return;
+    if (!canvasRef.current) return;
 
     const newPos = getClientTouchPos(ev.touches[0], canvasRef.current);
 
     const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) {
+      console.error('getContext("2d") returns null.')
+      return;
+    }
     ctx.beginPath();
     ctx.lineWidth = 10;
     ctx.moveTo(pos.x, pos.y);
@@ -89,6 +102,7 @@ export default function App() {
 
   function onTouchEnd() {
     if (remainedStrokes <= 0) return;
+    if (!canvasRef.current) return;
 
     setRemainedStrokes(remainedStrokes - 1);
     if (remainedStrokes === 1) {
