@@ -1,0 +1,30 @@
+body {
+  /* スクロール抑止 */
+  /*
+    Android 向け
+    https://usefulangle.com/post/278/html-disable-pull-to-refresh-with-css#:~:text=Pull%2Dto%2Drefresh%20can%20be%20disabled%20using%20the%20overscroll%2D,a%20container%20is%20over%2Dscrolled.
+  */
+  overscroll-behavior: contain;
+  /* iOS 向け */
+  overflow: hidden;
+
+  font-size: 32px;
+}
+
+h1 {
+  font-size: 5vw;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+button {
+  font-size: 32px;
+  padding: 16px;
+}
+
+canvas {
+  border: 1px solid black;
+}
