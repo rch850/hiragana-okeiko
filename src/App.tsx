@@ -93,6 +93,7 @@ export default function App() {
     }
     ctx.beginPath();
     ctx.lineWidth = 10;
+    ctx.lineCap = 'round';
     ctx.moveTo(pos.x, pos.y);
     ctx.lineTo(newPos.x, newPos.y);
     ctx.stroke();
