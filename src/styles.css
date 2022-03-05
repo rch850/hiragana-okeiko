@@ -8,6 +8,7 @@ body {
   /* iOS 向け */
   overflow: hidden;
 
+  font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 32px;
 }
 
@@ -16,11 +17,11 @@ h1 {
 }
 
 .App {
-  font-family: sans-serif;
   text-align: center;
 }
 
 button {
+  font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 32px;
   padding: 16px;
 }
