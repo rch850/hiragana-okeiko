@@ -10,6 +10,9 @@ body {
 
   font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 32px;
+
+  /* Prevent text selection for usability */
+  user-select: none;
 }
 
 h1 {
