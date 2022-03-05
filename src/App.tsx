@@ -2,6 +2,9 @@ import React, { useRef, useState } from "react";
 import { ODAI_LIST } from "./odai";
 import "./styles.css";
 
+/** Classes of pixel */
+type PixelClass = 'model' | 'stroke' | 'other';
+
 /** 位置計算 */
 function getClientTouchPos(touch: React.Touch, el: Element) {
   const canvasRect = el.getBoundingClientRect();
@@ -11,21 +14,25 @@ function getClientTouchPos(touch: React.Touch, el: Element) {
   };
 }
 
-/** ピクセルがグレーかどうかを返す */
-function isGray(imageData: ImageData, x: number, y: number): boolean {
+/** Return class of a pixel. */
+function classifyColor(imageData: ImageData, x: number, y: number): PixelClass {
   const r = imageData.data[(x + y * imageData.width) * 4];
-  return r < 250 && r >= 200;
+  if (r < 250 && r >= 200) return 'model';
+  if (r < 10) return 'stroke';
+  return 'other';
 }
 
-/** グレーのピクセル数を返す */
-function countGray(canvas: HTMLCanvasElement) {
+/** Return numbers of pixels for each classes. */
+function countColors(canvas: HTMLCanvasElement) {
+  let count = { model: 0, stroke: 0 };
   const ctx = canvas.getContext("2d");
-  if (!ctx) return 0;
+  if (!ctx) return count;
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  let count = 0;
   for (let y = 0; y < imageData.height; y++) {
     for (let x = 0; x < imageData.width; x++) {
-      if (isGray(imageData, x, y)) count++;
+      const color = classifyColor(imageData, x, y)
+      if (color === 'model') count.model++;
+      if (color === 'stroke') count.stroke++;
     }
   }
   return count;
@@ -34,7 +41,7 @@ function countGray(canvas: HTMLCanvasElement) {
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [output, setOutput] = useState("");
-  const [grayCount, setGrayCount] = useState(0);
+  const [modelPixelCount, setModelPixelCount] = useState(0);
   const [remainedStrokes, setRemainedStrokes] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [debugOut, setDebugOut] = useState("");
@@ -62,9 +69,9 @@ export default function App() {
     ctx.fillText(ODAI_LIST[newOdai].char, 50, 250);
 
     // グレーをカウント
-    const grayCount = countGray(canvasRef.current);
-    setGrayCount(grayCount);
-    // console.log(grayCount);
+    const colorCount = countColors(canvasRef.current);
+    setModelPixelCount(colorCount.model);
+    // console.log(colorCount.model);
 
     // ストローク数をリセット
     setRemainedStrokes(ODAI_LIST[newOdai].strokes);
@@ -108,12 +115,15 @@ export default function App() {
     setRemainedStrokes(remainedStrokes - 1);
     if (remainedStrokes === 1) {
       // 終わり
-      const finalGrayCount = countGray(canvasRef.current);
-      const rate = finalGrayCount / grayCount;
-      setDebugOut(`rate: ${rate}`);
-      if (rate <= 0.7) {
+      const finalColorCount = countColors(canvasRef.current);
+      const filledModelRate = finalColorCount.model / modelPixelCount;
+      const strokeRate = finalColorCount.stroke / modelPixelCount;
+      setDebugOut(`rate: ${filledModelRate}`);
+      if (strokeRate >= 3.0) {
+        setOutput("まっくろだよ！");
+      } else if (filledModelRate <= 0.7) {
         setOutput("じょうずだね！");
-      } else if (rate <= 0.9) {
+      } else if (filledModelRate <= 0.9) {
         setOutput("やったね！");
       } else {
         setOutput("がんばったね！");
