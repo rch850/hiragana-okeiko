@@ -10,7 +10,7 @@ export const ODAI_LIST: Odai[] = [
   { char: "え", strokes: 2 },
   { char: "お", strokes: 3 },
   { char: "か", strokes: 3 },
-  { char: "き", strokes: 3 },
+  { char: "き", strokes: 4 },
   { char: "く", strokes: 1 },
   { char: "け", strokes: 3 },
   { char: "こ", strokes: 2 },
