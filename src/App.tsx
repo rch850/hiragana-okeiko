@@ -1,42 +1,7 @@
 import React, { useRef, useState } from "react";
+import { countColors, convertTouchPos, getResultText } from "./lib";
 import { ODAI_LIST } from "./odai";
 import "./styles.css";
-
-/** Classes of pixel */
-type PixelClass = 'model' | 'stroke' | 'other';
-
-/** 位置計算 */
-function getClientTouchPos(touch: React.Touch, el: Element) {
-  const canvasRect = el.getBoundingClientRect();
-  return {
-    x: touch.clientX - canvasRect.x,
-    y: touch.clientY - canvasRect.y
-  };
-}
-
-/** Return class of a pixel. */
-function classifyColor(imageData: ImageData, x: number, y: number): PixelClass {
-  const r = imageData.data[(x + y * imageData.width) * 4];
-  if (r < 250 && r >= 200) return 'model';
-  if (r < 10) return 'stroke';
-  return 'other';
-}
-
-/** Return numbers of pixels for each classes. */
-function countColors(canvas: HTMLCanvasElement) {
-  let count = { model: 0, stroke: 0 };
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return count;
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  for (let y = 0; y < imageData.height; y++) {
-    for (let x = 0; x < imageData.width; x++) {
-      const color = classifyColor(imageData, x, y)
-      if (color === 'model') count.model++;
-      if (color === 'stroke') count.stroke++;
-    }
-  }
-  return count;
-}
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,12 +14,11 @@ export default function App() {
   function onInitMondai() {
     if (!canvasRef.current) return;
 
-    const canvasWidth = canvasRef.current.width;
-    const canvasHeight = canvasRef.current.height;
-
     // 初期化
     const newOdai = Math.floor(Math.random() * ODAI_LIST.length);
 
+    const canvasWidth = canvasRef.current.width;
+    const canvasHeight = canvasRef.current.height;
     let ctx = canvasRef.current.getContext("2d");
     if (!ctx) {
       console.error('getContext("2d") returns null.')
@@ -82,7 +46,7 @@ export default function App() {
     if (!canvasRef.current) return;
     if (remainedStrokes <= 0) return;
 
-    const newPos = getClientTouchPos(ev.touches[0], canvasRef.current);
+    const newPos = convertTouchPos(ev.touches[0], canvasRef.current);
     setDebugOut(`onTouchStart: ${newPos.x}, ${newPos.y}`);
     setPos(newPos);
   }
@@ -91,7 +55,7 @@ export default function App() {
     if (remainedStrokes <= 0) return;
     if (!canvasRef.current) return;
 
-    const newPos = getClientTouchPos(ev.touches[0], canvasRef.current);
+    const newPos = convertTouchPos(ev.touches[0], canvasRef.current);
 
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) {
@@ -116,18 +80,8 @@ export default function App() {
     if (remainedStrokes === 1) {
       // 終わり
       const finalColorCount = countColors(canvasRef.current);
-      const filledModelRate = finalColorCount.model / modelPixelCount;
-      const strokeRate = finalColorCount.stroke / modelPixelCount;
-      setDebugOut(`rate: ${filledModelRate}`);
-      if (strokeRate >= 3.0) {
-        setOutput("まっくろだよ！");
-      } else if (filledModelRate <= 0.7) {
-        setOutput("じょうずだね！");
-      } else if (filledModelRate <= 0.9) {
-        setOutput("やったね！");
-      } else {
-        setOutput("がんばったね！");
-      }
+      const resultText = getResultText(modelPixelCount, finalColorCount);
+      setOutput(resultText);
     }
   }
 
