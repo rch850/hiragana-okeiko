@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import CharCanvas from "./CharCanvas";
 import { countColors, convertTouchPos, getResultText } from "./lib";
 import { ODAI_LIST } from "./odai";
 import "./styles.css";
@@ -89,6 +90,7 @@ export default function App() {
     <div className="App">
       <h1>ひらがなのおけいこ</h1>
       <div>
+        <CharCanvas></CharCanvas>
         <canvas
           ref={canvasRef}
           width="300"
