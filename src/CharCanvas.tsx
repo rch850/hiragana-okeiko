@@ -1,15 +1,42 @@
-import { useRef, useState } from "react";
-import { convertTouchPos } from "./lib";
+import { useEffect, useRef, useState } from "react";
+import { convertTouchPos, countColors, getResultText } from "./lib";
+import { Odai } from "./odai";
 
-export default function CharCanvas() {
+type CharCanvasProps = {
+  odai: Odai
+}
+
+export default function CharCanvas(props: CharCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [modelPixelCount, setModelPixelCount] = useState(0);
+  const [remainedStrokes, setRemainedStrokes] = useState(props.odai.strokes);
+
+  useEffect(() => {
+    setRemainedStrokes(props.odai.strokes);
+
+    if (canvasRef.current) {
+      let ctx = canvasRef.current.getContext("2d");
+      if (ctx) {
+        // 塗りつぶす
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, 300, 300);
+        // 文字を描く
+        ctx.font = "200px 'Klee One'";
+        ctx.fillStyle = "#eee";
+        ctx.fillText(props.odai.char, 50, 250);
+        // グレーをカウント
+        setModelPixelCount(countColors(canvasRef.current).model);
+      }
+    }
+  }, [props.odai.char])
 
   function onTouchStart(ev: React.TouchEvent<HTMLCanvasElement>) {
     if (!canvasRef.current) {
       console.warn('canvasRef.current is falsy.')
       return
     }
+    if (remainedStrokes <= 0) return;
 
     const newPos = convertTouchPos(ev.touches[0], canvasRef.current);
     setPos(newPos);
@@ -20,6 +47,7 @@ export default function CharCanvas() {
       console.warn('canvasRef.current is falsy.')
       return
     }
+    if (remainedStrokes <= 0) return;
 
     const newPos = convertTouchPos(ev.touches[0], canvasRef.current);
 
@@ -42,6 +70,15 @@ export default function CharCanvas() {
     if (!canvasRef.current) {
       console.warn('canvasRef.current is falsy.')
       return
+    }
+    if (remainedStrokes <= 0) return;
+
+    setRemainedStrokes(remainedStrokes - 1);
+    if (remainedStrokes === 1) {
+      // 終わり
+      const finalColorCount = countColors(canvasRef.current);
+      const resultText = getResultText(modelPixelCount, finalColorCount);
+      console.log('dekita-------', resultText);
     }
   }
 

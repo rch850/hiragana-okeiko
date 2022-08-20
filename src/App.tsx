@@ -11,6 +11,7 @@ export default function App() {
   const [remainedStrokes, setRemainedStrokes] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [debugOut, setDebugOut] = useState("");
+  const [odai, setOdai] = useState({ char: '', strokes: 0 })
 
   function onInitMondai() {
     if (!canvasRef.current) return;
@@ -41,6 +42,8 @@ export default function App() {
     // ストローク数をリセット
     setRemainedStrokes(ODAI_LIST[newOdai].strokes);
     setOutput("さあがんばろう！");
+
+    setOdai(ODAI_LIST[newOdai]);
   }
 
   function onTouchStart(ev: React.TouchEvent<HTMLCanvasElement>) {
@@ -90,7 +93,7 @@ export default function App() {
     <div className="App">
       <h1>ひらがなのおけいこ</h1>
       <div>
-        <CharCanvas></CharCanvas>
+        <CharCanvas odai={odai}></CharCanvas>
         <canvas
           ref={canvasRef}
           width="300"

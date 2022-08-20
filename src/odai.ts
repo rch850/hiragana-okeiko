@@ -1,4 +1,4 @@
-interface Odai {
+export interface Odai {
   char: string;
   strokes: number;
 }
