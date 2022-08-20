@@ -3,7 +3,10 @@ import { convertTouchPos, countColors, getResultText } from "./lib";
 import { Odai } from "./odai";
 
 type CharCanvasProps = {
+  /** お題 */
   odai: Odai
+  /** 書き終わったときに呼び出される。 */
+  onResult: (text: string) => void
 }
 
 export default function CharCanvas(props: CharCanvasProps) {
@@ -78,7 +81,7 @@ export default function CharCanvas(props: CharCanvasProps) {
       // 終わり
       const finalColorCount = countColors(canvasRef.current);
       const resultText = getResultText(modelPixelCount, finalColorCount);
-      console.log('dekita-------', resultText);
+      props.onResult(resultText);
     }
   }
 

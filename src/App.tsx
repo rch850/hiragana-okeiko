@@ -85,15 +85,22 @@ export default function App() {
       // 終わり
       const finalColorCount = countColors(canvasRef.current);
       const resultText = getResultText(modelPixelCount, finalColorCount);
-      setOutput(resultText);
+      // setOutput(resultText);
     }
+  }
+
+  function onCharResult(resultText: string) {
+    setOutput(resultText)
   }
 
   return (
     <div className="App">
       <h1>ひらがなのおけいこ</h1>
       <div>
-        <CharCanvas odai={odai}></CharCanvas>
+        <CharCanvas
+          odai={odai}
+          onResult={onCharResult}
+        ></CharCanvas>
         <canvas
           ref={canvasRef}
           width="300"
