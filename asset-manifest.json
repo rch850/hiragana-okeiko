@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/hiragana-okeiko/static/css/main.a7dc040b.css",
-    "main.js": "/hiragana-okeiko/static/js/main.d23f3818.js",
+    "main.css": "/hiragana-okeiko/static/css/main.31ad915a.css",
+    "main.js": "/hiragana-okeiko/static/js/main.f21fe769.js",
     "index.html": "/hiragana-okeiko/index.html",
-    "main.a7dc040b.css.map": "/hiragana-okeiko/static/css/main.a7dc040b.css.map",
-    "main.d23f3818.js.map": "/hiragana-okeiko/static/js/main.d23f3818.js.map"
+    "main.31ad915a.css.map": "/hiragana-okeiko/static/css/main.31ad915a.css.map",
+    "main.f21fe769.js.map": "/hiragana-okeiko/static/js/main.f21fe769.js.map"
   },
   "entrypoints": [
-    "static/css/main.a7dc040b.css",
-    "static/js/main.d23f3818.js"
+    "static/css/main.31ad915a.css",
+    "static/js/main.f21fe769.js"
   ]
 }
