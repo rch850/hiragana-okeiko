@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { convertTouchPos, countColors, getResultText } from "./lib";
+import { disableScroll, enableScroll } from "./lib-scroll";
 import { Odai } from "./odai";
 
 type CharCanvasProps = {
@@ -35,6 +36,8 @@ export default function CharCanvas(props: CharCanvasProps) {
   }, [props.odai.char])
 
   function onTouchStart(ev: React.TouchEvent<HTMLCanvasElement>) {
+    disableScroll();
+
     if (!canvasRef.current) {
       console.warn('canvasRef.current is falsy.')
       return
@@ -70,6 +73,8 @@ export default function CharCanvas(props: CharCanvasProps) {
   }
 
   function onTouchEnd() {
+    enableScroll();
+
     if (!canvasRef.current) {
       console.warn('canvasRef.current is falsy.')
       return
@@ -87,12 +92,12 @@ export default function CharCanvas(props: CharCanvasProps) {
 
   return (
     <canvas
-        ref={canvasRef}
-        width="300"
-        height="300"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+      ref={canvasRef}
+      width="300"
+      height="300"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     />
   )
 }

@@ -6,7 +6,7 @@ body {
   */
   overscroll-behavior: contain;
   /* iOS 向け */
-  overflow: hidden;
+  /* overflow: hidden; */
 
   font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 32px;
