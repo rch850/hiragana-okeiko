@@ -1,9 +1,14 @@
-/*
-  Josh's Custom CSS Reset
-  https://www.joshwcomeau.com/css/custom-css-reset/
-  via https://coliss.com/articles/build-websites/operation/css/css-reset-for-modern-browser.html
-*/
-*,*::before,*::after{box-sizing:border-box}*{margin:0}html,body{height:100%}body{line-height:1.5;-webkit-font-smoothing:antialiased}img,picture,video,canvas,svg{display:block;max-width:100%}input,button,textarea,select{font:inherit}p,h1,h2,h3,h4,h5,h6{overflow-wrap:break-word}#root,#__next{isolation:isolate}
+/*** The new CSS reset - version 1.7.2 (last updated 23.6.2022) ***/
+/** via https://coliss.com/articles/build-websites/operation/css/css-reset-for-modern-browser.html */
+
+*:where(:not(html,iframe,canvas,img,svg,video):not(svg*,symbol*)){all:unset;display:revert}*,*::before,*::after{box-sizing:border-box}
+a,button{cursor:revert}
+ol,ul,menu{list-style:none}
+img{max-width:100%}
+table{border-collapse:collapse}
+input,textarea{-webkit-user-select:auto}
+textarea{white-space:revert}
+meter{-webkit-appearance:revert;appearance:revert}::placeholder{color:unset}:where([hidden]){display:none}:where([contenteditable]:not([contenteditable="false"])){-moz-user-modify:read-write;-webkit-user-modify:read-write;overflow-wrap:break-word;-webkit-line-break:after-white-space;-webkit-user-select:auto}:where([draggable="true"]){-webkit-user-drag:element}
 
 html, body, #root, #root > div {
   height: 100%;
