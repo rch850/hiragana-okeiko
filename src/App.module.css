@@ -1,0 +1,24 @@
+.app {
+  text-align: center;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.canvasList {
+  overflow-y: scroll;
+}
+
+h1 {
+  font-size: 5vw;
+}
+
+button {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 32px;
+  padding: 16px;
+}
+
+canvas {
+  margin: auto;
+  border: 1px solid black;
+}

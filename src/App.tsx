@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CharCanvas from "./CharCanvas";
 import { HIRAGANA_STROKES, POKEMON_NAMES } from "./odai";
-import "./styles.css";
+import styles from './App.module.css'
 
 export default function App() {
   const [output, setOutput] = useState("");
@@ -19,9 +19,9 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <div className={styles.app}>
       <h1>ひらがなのおけいこ</h1>
-      <div>
+      <div className={styles.canvasList}>
         {odai.split("").map(char => (
           <CharCanvas
             odai={{char, strokes: HIRAGANA_STROKES[char]}}
@@ -29,9 +29,11 @@ export default function App() {
           ></CharCanvas>
         ))}
       </div>
-      <button onClick={onInitMondai}>もんだい</button>
-      <div>{output}</div>
-      <div style={{ display: "none" }}>{debugOut}</div>
+      <div>
+        <button onClick={onInitMondai}>もんだい</button>
+        <div>{output}</div>
+        <div style={{ display: "none" }}>{debugOut}</div>
+      </div>
     </div>
   );
 }
