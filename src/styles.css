@@ -11,7 +11,18 @@ textarea{white-space:revert}
 meter{-webkit-appearance:revert;appearance:revert}::placeholder{color:unset}:where([hidden]){display:none}:where([contenteditable]:not([contenteditable="false"])){-moz-user-modify:read-write;-webkit-user-modify:read-write;overflow-wrap:break-word;-webkit-line-break:after-white-space;-webkit-user-select:auto}:where([draggable="true"]){-webkit-user-drag:element}
 
 html, body, #root, #root > div {
+  margin: 0;
+  padding: 0;
   height: 100%;
+}
+
+/* https://developer.mozilla.org/ja/docs/Web/CSS/env */
+body {
+  padding:
+    env(safe-area-inset-top, 20px)
+    env(safe-area-inset-right, 20px)
+    env(safe-area-inset-bottom, 20px)
+    env(safe-area-inset-left, 20px);
 }
 
 body {
