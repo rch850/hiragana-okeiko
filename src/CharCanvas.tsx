@@ -79,10 +79,11 @@ export default function CharCanvas(props: CharCanvasProps) {
       console.warn('canvasRef.current is falsy.')
       return
     }
-    if (remainedStrokes <= 0) return;
 
-    setRemainedStrokes(remainedStrokes - 1);
-    if (remainedStrokes === 1) {
+    if (remainedStrokes > 1) {
+      setRemainedStrokes(remainedStrokes - 1);
+    }
+    if (remainedStrokes <= 1) {
       // 終わり
       const finalColorCount = countColors(canvasRef.current);
       const resultText = getResultText(modelPixelCount, finalColorCount);
